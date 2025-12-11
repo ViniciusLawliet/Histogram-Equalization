@@ -8,13 +8,13 @@ After smoothing, the image is converted to **Grayscale**, since histogram equali
 
 Next, histogram equalization is performed to enhance contrast. First, the histogram of intensity levels (0–255) is computed. Then, its **Cumulative Distribution Function (CDF)** is obtained and normalized to the 0–255 range, generating a mapping that reassigns each original intensity to a new value. Applying this mapping to all pixels produces the equalized image.
 
-<p style="display: flex; justify-content: center; align-items: flex-start; gap: 20px;">
-  <img src="resources/img_before.png" alt="Before" style="height:561px;" />
-  <img src="resources/img_after.png" alt="After" style="height:561px;" />
+<p align="center">
+  <img src="resources/img_before.bmp" alt="Before" width="200" style="vertical-align: top; margin-right: 40px;" />
+  <img src="resources/img_after.bmp" alt="After" width="200" style="vertical-align: top;" />
 </p>
 
 <p align="center">
-  Comparison of the image **Before and After** applying the Histogram Equalization.
+  Comparison of the image <strong>Before and After</strong> applying Histogram Equalization.
 </p>
 
 ---
@@ -143,5 +143,7 @@ The experimental baseline is defined by the **execution times of the sequential 
 ---
 
 ## License & Attribution
+
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
 ---
