@@ -1,0 +1,4 @@
+/ref
+*.Sequential
+*.MPI
+*.OpenMP
