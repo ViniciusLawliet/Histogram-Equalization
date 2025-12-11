@@ -1,4 +1,4 @@
-# Histogram Equalization: Sequential, OpenMP, and MPI Implementations
+# Histogram Equalization: Sequential, MPI, and OpenMP Implementations
 
 ## Project Overview
 
@@ -14,7 +14,7 @@ Next, histogram equalization is performed to enhance contrast. First, the histog
 </p>
 
 <p align="center">
-  Comparison of the image <strong>Before and After</strong> applying Histogram Equalization.
+  Comparison of the image <strong>Before and After</strong> applying Histogram Equalization (using a 5×5 square mask for noise reduction).
 </p>
 
 ---
@@ -49,7 +49,11 @@ The 24-bit per pixel (24bpp) format supports 16,777,216 distinct colors and stor
   ```
 
 ---
-### **2. MPI (Distributed)**
+### **2. MPI**
+- **Prerequisite:**  
+  ```bash
+  install: `sudo apt install openmpi-bin libopenmpi-dev`
+  ```
 - **Compile:**  
   ```bash
   mpicc 2.MPI.c -o 2.MPI
@@ -65,7 +69,7 @@ The 24-bit per pixel (24bpp) format supports 16,777,216 distinct colors and stor
 > *Use `--oversubscribe` if needed.*
 
 ---
-### **3. OpenMP (Shared Memory)**
+### **3. OpenMP**
 - **Compile:**  
   ```bash
   gcc 3.OpenMP.c -o 3.OpenMP -fopenmp
@@ -100,7 +104,7 @@ static inline uint8_t median_uint8_hist(const uint8_t *values, int size) {
 
 **Notes:**  
 - This avoids sorting the neighborhood values and leverages the fixed 0–255 range.  
-- Complexity per pixel: O(mask_size + 256) (dominant cost: building hist).  
+- Per-pixel complexity: O(N² + 256) — building the histogram costs O(N²), and the 256-bin scan is a fixed constant. The histogram method was chosen because, in C, the fixed 256-step pass combined with simple integer increments avoids qsort()’s comparator and function-call overhead, making it typically faster for small masks (3×3 – 7×7). Still, benchmarking an inline, specialized sort/selection routine is recommended to evaluate platform-specific behavior, as an inline variant may outperform both approaches for larger masks.
 - For large masks reuse of `hist[]` across pixels is recommended to reduce allocation/initialization overhead.
 
 ---
@@ -112,8 +116,8 @@ static inline uint8_t median_uint8_hist(const uint8_t *values, int size) {
 
 ## Performance metrics
 
-- **Speedup** = time(1 resource) / time(N resources)  
-- **Efficiency** = Speedup / N  (0 .. 1)  
+- **Speedup** = time(1 resource) / time(N resources)
+- **Efficiency** = Speedup / N  (ranging from 0 to 1, where N is the number of resources)
 
 The experimental baseline is defined by the **execution times of the sequential implementation** (`1.Sequential`). All performance comparisons for OpenMP and MPI are measured relative to this baseline. Sequential timings (averaged over 5 executions) for different mask sizes are as follows:
 
@@ -147,3 +151,4 @@ The experimental baseline is defined by the **execution times of the sequential 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
+
